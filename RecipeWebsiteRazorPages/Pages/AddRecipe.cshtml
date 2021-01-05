@@ -24,6 +24,73 @@
             </ul>
         </div>
     </nav>
+    <br />
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5">
+                <h2>Add recipe</h2>
+                <br />
+                <form method="post" asp-action="InsertRecipe" class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="text">Recipe Name</label>
+                        <input asp-for="RecipeName" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="textarea">Recipe Ingredients</label>
+                        <textarea asp-for="RecipeIngredients" class="form-control" rows="3" id="Ingredients"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="textarea">Recipe Description</label>
+                        <textarea asp-for="RecipeDescription" class="form-control" rows="5" id="Description"></textarea>
+                    </div>
+                    <br />
+                    @*
+                    <div>
+                        <form asp-controller="AddRecipe" asp-action="PhotoUpload" enctype="multipart/form-data" method="post">
+                            <input type="file" name="ThisIsTheNameOfThePhoto" />
+                        </form>
+                    </div>
+                    *@
+                    <br /><br /><br />
+
+                    <div class="form-group">
+                        <input type="submit" asp-page-handler="InsertRecipe" value="Insert Recipe" />
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="col-sm-2">
+                col 2
+
+            </div>
+            <div class="col-sm-5">
+                <h2>col 5</h2>
+                <br />
+                @{
+                    var recipes = ViewData["recipeList"] as List<RecipeWebsiteRazorPages.Models.RecipeModel>;
+                    if (recipes == null)
+                    {
+                        <h3>Db is empty</h3>
+                    }
+                    else
+                    {
+                        foreach (var recipe in recipes)
+                        {
+                            <ul>
+                                <li>@recipe.RecipeName</li>
+                            </ul>
+                        }
+                    }
+
+
+                }
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

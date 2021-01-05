@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -12,12 +13,19 @@ namespace RecipeWebsiteRazorPages
 {
     public class Startup
     {
+        private IConfiguration _config { get; }
+        public Startup(IConfiguration config)
+        {
+            _config = config;
+        }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            string connString = this._config.GetConnectionString("ConnectionName");
             services.AddRazorPages().AddRazorRuntimeCompilation();
+            
             services.AddMvc(options => options.EnableEndpointRouting = false);
         }
 
