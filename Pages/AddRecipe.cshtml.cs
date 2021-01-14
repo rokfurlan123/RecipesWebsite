@@ -13,58 +13,69 @@ using Microsoft.Extensions.Configuration;
 using RecipeWebsiteRazorPages.Models;
 using System.IO;
 using System.Drawing;
+using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
 
 namespace RecipeWebsiteRazorPages.Pages
 {
     public class AddRecipeModel : PageModel
     {
-        private readonly IConfiguration configuration;
-        public AddRecipeModel(IConfiguration config)
+        private readonly IOptions<AppsettingsValues> config;
+
+        public AddRecipeModel(IOptions<AppsettingsValues> config)
         {
-            this.configuration = config;
+            this.config = config;
         }
-        
+        [Required]
         [BindProperty]
+        //[Display(Prompt = "")] prompt je basically placeholder - value noter vpisan
         public string RecipeName { get; set; }
+        [Required]
         [BindProperty]
         public string RecipeDescription { get; set; }
+        [Required]
         [BindProperty]
         public string RecipeIngredients { get; set; }
+        [Required]
         [BindProperty]
         public IFormFile RecipePhoto { get; set; }
 
         public IActionResult OnPostInsertRecipe()
         {
-            var recipe = new RecipeModel();
-                    
-            var memoryStreamPhoto = new MemoryStream();
-            RecipePhoto.CopyTo(memoryStreamPhoto);
-            //Image image = Image.FromStream(memoryStreamPhoto, true, true);
-            var imageBytes = memoryStreamPhoto.ToArray();
-
-            recipe.RecipeName = RecipeName;
-            recipe.RecipeDescription = RecipeDescription;
-            recipe.RecipeIngredients = RecipeIngredients;
-            recipe.RecipePhoto = imageBytes;
-
-            string connString = "Server=DESKTOP-IB6EGL9;Database=RecipeDB;Trusted_Connection=True;MultipleActiveResultSets=True;";
-            //string connString = ConfigurationManager.ConnectionStrings["ConnectionName"].ConnectionString;
-
-            //rabis nuget system.data.sqlclient
-            using (IDbConnection db = new SqlConnection(connString))
+            if(ModelState.IsValid)
             {
-                string sqlQuery = "INSERT INTO RecipeTable (RecipeName, RecipeDescription, RecipeIngredients, RecipePhoto) VALUES(@RecipeName, @RecipeDescription, @RecipeIngredients, @RecipePhoto)";
-                int rowsAffected = db.Execute(sqlQuery, recipe);
+                var recipe = new RecipeModel();
+
+                var memoryStreamPhoto = new MemoryStream();
+                RecipePhoto.CopyTo(memoryStreamPhoto);
+                var imageBytes = memoryStreamPhoto.ToArray();
+
+                recipe.RecipeName = RecipeName;
+                recipe.RecipeDescription = RecipeDescription;
+                recipe.RecipeIngredients = RecipeIngredients;
+                recipe.RecipePhoto = imageBytes;
+
+                string connString = config.Value.ConnectionName;
+
+                //rabis nuget system.data.sqlclient
+                using (IDbConnection db = new SqlConnection(connString))
+                {
+                    string sqlQuery = "INSERT INTO RecipeTable (RecipeName, RecipeDescription, RecipeIngredients, RecipePhoto) VALUES(@RecipeName, @RecipeDescription, @RecipeIngredients, @RecipePhoto)";
+                    int rowsAffected = db.Execute(sqlQuery, recipe);
+                }
+                return RedirectToPage();
+
             }
 
-            return RedirectToPage();
+            return Page();
         }
-
-        public void OnGet(int ? id)
+            
+        public void OnGet(int? id)
         {
-            if(id != null)
-            {
-                string conn = "Server=DESKTOP-IB6EGL9;Database=RecipeDB;Trusted_Connection=True;MultipleActiveResultSets=True;";
+            
+            string conn = config.Value.ConnectionName;
+            if (id != null)
+            {            
                 using (IDbConnection db = new SqlConnection(conn))
                 {
                     var sqlStatement = $"DELETE FROM RecipeTable WHERE RecipeId='{id}'";
@@ -73,8 +84,8 @@ namespace RecipeWebsiteRazorPages.Pages
             }
 
             var recipeList = new List<RecipeModel>();
-            string connString = "Server=DESKTOP-IB6EGL9;Database=RecipeDB;Trusted_Connection=True;MultipleActiveResultSets=True;";
-            using (IDbConnection db = new SqlConnection(connString))
+            
+            using (IDbConnection db = new SqlConnection(conn))
             {
                 recipeList = db.Query<RecipeModel>("SELECT RecipeName, RecipeId FROM RecipeTable").ToList();
             }

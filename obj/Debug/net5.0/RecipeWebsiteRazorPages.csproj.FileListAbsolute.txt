@@ -363,4 +363,4 @@ D:\Visual Studio Projects\RecipeWebsiteRazorPages\RecipeWebsiteRazorPages\bin\De
 D:\Visual Studio Projects\RecipeWebsiteRazorPages\RecipeWebsiteRazorPages\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 D:\Visual Studio Projects\RecipeWebsiteRazorPages\RecipeWebsiteRazorPages\bin\Debug\net5.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 D:\Visual Studio Projects\RecipeWebsiteRazorPages\RecipeWebsiteRazorPages\obj\Debug\net5.0\Razor\Pages\ViewDetailsRecipe.cshtml.g.cs
-D:\Visual Studio Projects\RecipeWebsiteRazorPages\RecipeWebsiteRazorPages\obj\Debug\net5.0\Razor\Pages\DeleteRecipe.cshtml.g.cs
+D:\Visual Studio Projects\RecipeWebsiteRazorPages\RecipeWebsiteRazorPages\obj\Debug\net5.0\Razor\Pages\EditRecipe.cshtml.g.cs

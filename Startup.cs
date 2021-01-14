@@ -13,20 +13,26 @@ namespace RecipeWebsiteRazorPages
 {
     public class Startup
     {
-        private IConfiguration _config { get; }
-        public Startup(IConfiguration config)
+        public IConfigurationRoot Configuration { get; set; }
+
+        public Startup(IWebHostEnvironment env)
         {
-            _config = config;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            Configuration = builder.Build();
         }
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            string connString = this._config.GetConnectionString("ConnectionName");
+            
             services.AddRazorPages().AddRazorRuntimeCompilation();
             
             services.AddMvc(options => options.EnableEndpointRouting = false);
+
+            services.Configure<AppsettingsValues>(option => Configuration.GetSection("ConnectionStrings").Bind(option));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

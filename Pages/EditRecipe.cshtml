@@ -1,0 +1,87 @@
+﻿@page
+@model RecipeWebsiteRazorPages.Pages.EditRecipeModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Recipe</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body>
+    <nav class="navbar navbar-expand navbar-dark bg-dark">
+        <a href="/Index" class="navbar-brand">Home</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-lg-auto">
+                <li class="nav-item">
+                    <a href="/AddRecipe">Add Recipe</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/ViewRecipe">View Recipe</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <br />
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5">
+                <h2>Add recipe</h2>
+                <br />
+                <form method="post" asp-route-id="@Model.Recipe.RecipeId" class="form-horizontal" enctype="multipart/form-data">
+
+                    <div class="form-group">
+                        <label class="text">Recipe Name</label>
+                        <input asp-for="Recipe.RecipeName" class="form-control" />
+                        <span asp-validation-for="Recipe.RecipeName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="textarea">Recipe Ingredients</label>
+                        <textarea asp-for="Recipe.RecipeIngredients" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Recipe.RecipeIngredients" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="textarea">Recipe Description</label>
+                        <textarea asp-for="Recipe.RecipeDescription" class="form-control" rows="5"></textarea>
+                        <span asp-validation-for="Recipe.RecipeDescription" class="text-danger"></span>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        <label class="text">Recipe Photo</label><br />
+                        <input type="file" id="file" asp-for="RecipePhotoFormFile" />
+                        <br />
+                        
+                    </div>
+
+                    <br />
+
+                    <div class="form-group">
+                        <input type="submit" value="Update Recipe" />
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="col-sm-1">
+
+            </div>
+            <div class="col-sm-5">
+                <br />
+                @{
+                    @*
+                        var base64 = Convert.ToBase64String(RecipePhoto);
+                        var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                        <img src="@imgsrc" height="400" width="400" />
+                    *@
+                }
+            </div>
+        </div>
+    </div>
+</body>
+</html>

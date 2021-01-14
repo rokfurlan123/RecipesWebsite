@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -7,23 +8,31 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using RecipeWebsiteRazorPages.Models;
 
 namespace RecipeWebsiteRazorPages.Pages
 {
     public class ViewRecipeModel : PageModel
     {
-        [BindProperty]
-        public string RecipeName { get; set; }
-        [BindProperty]
-        public byte[] RecipePhoto { get; set; }
+        private readonly IOptions<AppsettingsValues> config;
+
+        public ViewRecipeModel(IOptions<AppsettingsValues> config)
+        {
+            this.config = config;
+        }
 
         public void OnGet()
         {
-            var recipeInfo = new List<ViewRecipeModel>();
-            string connString = "Server=DESKTOP-IB6EGL9;Database=RecipeDB;Trusted_Connection=True;MultipleActiveResultSets=True;";
-            using (IDbConnection db = new SqlConnection(connString))
+            var recipeInfo = new List<RecipeModel>();
+            string conn = config.Value.ConnectionName;
+            
+            //string connString = ConfigurationManager.ConnectionStrings["ConnectionName"].ConnectionString;
+            
+            using (IDbConnection db = new SqlConnection(conn))
             {
-                recipeInfo = db.Query<ViewRecipeModel>("SELECT RecipeName, RecipePhoto FROM RecipeTable").ToList();
+                recipeInfo = db.Query<RecipeModel>("SELECT RecipeId, RecipeName, RecipePhoto FROM RecipeTable").ToList();
             }
             if (recipeInfo != null)
             {

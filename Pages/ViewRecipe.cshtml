@@ -8,7 +8,40 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/style.css" />
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+    
+    <style>
+        .navbar-nav > .nav-item {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        body {
+            font: bold 16px Times New Roman;
+            font-display: auto;
+        }
+
+        .flexbox-container {
+            display: flex;
+            flex-flow: wrap;
+            justify-content: space-around;
+        }
+
+        .card {
+            width: 18rem;
+            margin: 10px;
+            border: 3px solid black;
+            background-color: lightgrey;
+        }
+
+        .card-img-top {
+            width: 100%;
+            height: 20vw;
+            object-fit: cover;
+        }
+
+    </style>
+
 </head>
 <body>
     <nav class="navbar navbar-expand navbar-dark bg-dark">
@@ -25,64 +58,34 @@
         </div>
     </nav>
     <br /><br />
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card shadow" style="width: 20rem">
-                    <a class="nav-link" asp-page="ViewDetailsRecipe" asp-route-id="5" method="post">
-                        <img class="card-img-top" src="~/Images/website static/strawberrycream.jpg" alt="cardImage"/>
-                    </a>
 
-                    <div class="card body text-center">
-                        <h5 class="card-title">Test</h5>
-                        <p class="card-text">
-                           
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    @*
-        <a href="@Url.Action("ViewDetails")" name="id" value="5">
-            <img class="card-img-top" src="~/Images/strawberrycream.jpg" alt="Card image cap" />
-        </a>
-
-    *@
-
-
-    @*
-        @{
-            var recipes = ViewData["recipeList"] as List<RecipeWebsiteRazorPages.Models.RecipeModel>;
-
-            if (recipes == null)
-            {
-                <h3>Empty db</h3>
-            }
-            else
-            {
-                @foreach(var recipe in recipes)
+    @{
+        var recipes = ViewData["recipeInfo"] as List<RecipeWebsiteRazorPages.Models.RecipeModel>;
+        if (recipes.Count <= 0)
+        {
+            <p>not workin</p>
+        }
+        else
+        {
+            <div class="flexbox-container">
+                @foreach (var recipe in recipes)
                 {
-                    <div class="col-md-4">
-                        <div class="card mb-4 shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225">
-                                <div class="card-body">
-                                    <h3 class="card-title">@recipe.RecipeName</h3>
-                                    <p class="card-text">nothin</p>
-                                    <div class="justify-content-between align-items-center">
-
-
-                                    </div>
-                                </div>
-                            </svg>
+                    <div class="card">
+                        @{
+                            var base64 = Convert.ToBase64String(recipe.RecipePhoto);
+                            var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                        }
+                        <img src="@imgsrc" class="card-img-top" alt="photoCard">
+                        <div class="card-body">
+                            <h5 class="card-title">@recipe.RecipeName</h5>
+                            <a asp-page="ViewDetailsRecipe" asp-route-id="@recipe.RecipeId" class="btn btn-primary">View</a>
                         </div>
                     </div>
-                }
-            }
-
+                       
+                 }
+            </div>
         }
-    *@
+    }
+
 </body>
 </html>

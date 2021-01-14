@@ -26,8 +26,10 @@
     </nav>
     <br /><br />
     @{
+        @*
         var recipe = ViewData["recipeInfo"] as RecipeWebsiteRazorPages.Models.RecipeModel;
-        if (recipe == null)
+            *@
+        if (Model.Recipe.RecipePhoto == null)
         {
             <p>model empty</p>
         }
@@ -39,34 +41,30 @@
 
                     </div>
                     <div class="col-sm-5">
-                        <h1>@recipe.RecipeName</h1>
+                        <h1>@Model.Recipe.RecipeName</h1>
                         <br />
                         <br />
                         <div class="form-group">
                             <label class="textarea">Recipe Ingredients</label>
-                            <p>@recipe.RecipeIngredients"</p>
+                            <p>@Model.Recipe.RecipeIngredients</p>
                         </div>
                         <br />
                         <br />
 
                         <div class="form-group">
                             <label class="textarea">Recipe Description</label>
-                            <p>@recipe.RecipeDescription"</p>
+                            <p>@Model.Recipe.RecipeDescription</p>
                         </div>
                         <br />
 
-
+                        <a asp-page="EditRecipe" asp-route-id="@Model.Recipe.RecipeId" class="btn btn-primary">Edit</a>
                     </div>
                     <div class="col-sm-1">
-
+                        
                     </div>
                     <div class="col-sm-5">
                         <br />
-                        @{
-                            var base64 = Convert.ToBase64String(recipe.RecipePhoto);
-                            var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
-                            <img src="@imgsrc" height="400" width="400" />
-                        }
+                            <img src="~/Images/UserImages/recipePhoto.png" width="400" height="400" />
                     </div>
                 </div>
             </div>
